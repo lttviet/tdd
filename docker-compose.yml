@@ -1,0 +1,8 @@
+version: '2'
+services:
+  superlists:
+    build:
+      context: .
+    container_name: superlists
+    ports:
+      - "8000:8000"
