@@ -1,8 +1,11 @@
 version: '2'
 services:
-  superlists:
+  tdd:
     build:
       context: .
-    container_name: superlists
+    container_name: tdd
+    volumes:
+      - ./database:/database
+      - ./static:/static
     ports:
       - "8000:8000"
