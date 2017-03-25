@@ -1,0 +1,4 @@
+Django==1.11b1
+gunicorn==19.7.1
+pytz==2016.10
+selenium==3.3.1
