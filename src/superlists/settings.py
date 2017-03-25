@@ -25,7 +25,7 @@ SECRET_KEY = 'adh%cne5prfev21!75tko9+z-*n*s3%$drz1)-@)sn7j$))j$)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tdd-staging.lttviet.com', 'localhost']
 
 
 # Application definition
