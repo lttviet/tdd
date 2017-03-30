@@ -7,5 +7,11 @@ class List(models.Model):
         return reverse('view_list', args=[self.id])
 
 class Item(models.Model):
-    text = models.TextField(default="")
+    text = models.TextField(default='')
     list = models.ForeignKey(List, default=None)
+
+    class Meta:
+        unique_together = ('list', 'text')
+
+    def __str__(self):
+        return self.text
