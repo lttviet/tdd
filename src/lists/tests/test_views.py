@@ -1,14 +1,19 @@
 from django.utils.html import escape
 from django.core.urlresolvers import resolve
 from django.template.loader import render_to_string
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import TestCase
 from django.http import HttpRequest
 
-from lists.forms import ItemForm, EMPTY_ITEM_ERROR
+from unittest import skip
+
+from lists.forms import (
+    ItemForm, ExistingListItemForm,
+    EMPTY_ITEM_ERROR, DUPLICATE_ITEM_ERROR
+)
 from lists.views import home_page
 from lists.models import Item, List
 
-class HomePageTest(StaticLiveServerTestCase):
+class HomePageTest(TestCase):
 
     def test_use_home_template(self):
         response = self.client.get("/")
@@ -19,7 +24,7 @@ class HomePageTest(StaticLiveServerTestCase):
         self.assertIsInstance(response.context['form'], ItemForm)
 
 
-class ListViewTest(StaticLiveServerTestCase):
+class ListViewTest(TestCase):
 
     def test_uses_list_template(self):
         list_ = List.objects.create()
@@ -88,8 +93,20 @@ class ListViewTest(StaticLiveServerTestCase):
         response = self.post_invalid_input()
         self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 
+    @skip
+    def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
+        list1 = List.objects.create()
+        item1 = Item.objects.create(list=list1, text='bla')
+        response = self.client.post(
+            f'/lists/{list1.id}/',
+            data={'text': 'bla'}
+        )
+        error = escape("You've already got this in your list")
+        self.assertContains(response, error)
+        self.assertTemplateUsed('list.html')
+        self.assertEqual(Item.objects.all().count(), 1)
 
-class NewListTest(StaticLiveServerTestCase):
+class NewListTest(TestCase):
 
     def test_can_save_POST_request(self):
         response = self.client.post("/lists/new", data={"text": "A new list item"})
