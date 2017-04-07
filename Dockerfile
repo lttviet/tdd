@@ -11,5 +11,10 @@ COPY src .
 
 EXPOSE 8000
 
-CMD [ "gunicorn", "superlists.wsgi:application", "--bind", "0.0.0.0:8000" ]
+CMD [ "gunicorn", "superlists.wsgi:application", \
+      "--bind", "0.0.0.0:8000",                  \
+      "--capture-output",                        \
+      "--access-logfile", "-",                   \
+      "--error-logfile", "-"                     \
+]
 VOLUME /database /static
