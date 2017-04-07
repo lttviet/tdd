@@ -4,6 +4,9 @@ services:
     build:
       context: .
     container_name: tdd
+    environment:
+      - SECRET_KEY=secret
+      - EMAIL_PASSWORD=123
     volumes:
       - ./database:/database
       - ./static:/static
